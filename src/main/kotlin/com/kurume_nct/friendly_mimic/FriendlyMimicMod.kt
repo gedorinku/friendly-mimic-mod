@@ -2,7 +2,6 @@ package com.kurume_nct.friendly_mimic
 
 import com.kurume_nct.friendly_mimic.entity.EntityMimic
 import com.kurume_nct.friendly_mimic.entity.RenderMimic
-import com.kurume_nct.friendly_mimic.GUIHandler
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.common.Mod
@@ -10,6 +9,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import net.minecraftforge.fml.common.registry.EntityRegistry
 import java.awt.Color
 
@@ -32,6 +32,23 @@ class FriendlyMimicMod {
     @EventHandler
     fun init(event: FMLInitializationEvent) {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GUIHandler())
+        initChannel()
+    }
+
+    private fun initChannel() {
+        ChannelInitializer.initChannel(channel)
+//      このコードがコンパイルエラーになってつらい(よく分からない)ので，とりあえず該当部分をJava書いてで回避してます(許して)
+//        var id = 0
+//        channel.registerMessage(
+//                MimicInventoryChangedMessage::MimicInventoryChangedMessageHandler::class.java,
+//                MimicInventoryChangedMessage::class.java,
+//                id++,
+//                Side.CLIENT)
+//        channel.registerMessage<MimicInventoryChangedMessage, IMessage>(
+//                MimicInventoryChangedMessage::MimicInventoryChangedMessageHandler::class.java,
+//                MimicInventoryChangedMessage::class.java,
+//                id++,
+//                Side.SERVER)
     }
 
     companion object {
@@ -41,5 +58,7 @@ class FriendlyMimicMod {
 
         @Mod.Instance(MODID)
         lateinit var instance: FriendlyMimicMod
+
+        val channel: SimpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(MODID)
     }
 }

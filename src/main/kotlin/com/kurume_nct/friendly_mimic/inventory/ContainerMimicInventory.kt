@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack
  */
 class ContainerMimicInventory(inventoryPlayer: InventoryPlayer) : Container() {
 
-    private val inventory: MimicInventory = MimicInventory(inventoryPlayer.player.world)
+    private val inventory: MimicInventory = MimicInventory(inventoryPlayer.player.world, this)
 
     init {
         inventory.openInventory(inventoryPlayer.player)

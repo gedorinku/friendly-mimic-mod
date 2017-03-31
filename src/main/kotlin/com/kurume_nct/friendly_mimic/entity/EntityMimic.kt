@@ -2,6 +2,7 @@ package com.kurume_nct.friendly_mimic.entity
 
 import com.kurume_nct.friendly_mimic.FriendlyMimicMod
 import com.kurume_nct.friendly_mimic.forEach
+import com.kurume_nct.friendly_mimic.inventory.MimicInventoryChangedMessage
 import com.kurume_nct.friendly_mimic.inventory.MimicInventoryTag
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityAgeable
@@ -197,6 +198,12 @@ class EntityMimic : EntityTameable {
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).baseValue = if (isTamed) HEALTH_FRIENDLY else HEALTH
 
         attributeMap.registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).baseValue = 2.0
+    }
+
+    override fun onDeath(cause: DamageSource?) {
+        super.onDeath(cause)
+
+        MimicInventoryChangedMessage.removeAllHandlersOfEntity(this)
     }
 
     fun getInventoryContent(index: Int): ItemStack = dataManager.get(INVENTORY_CONTENTS[index])
